@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Commit the Garde! Digital</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet" />
+    <style>
+      html, body { margin: 0; padding: 0; background: #1a1a1a; overflow: hidden; font-family: system-ui, sans-serif; }
+      #app-content, #app-content *, #modal-overlay * { box-sizing: border-box; }
+      #app-shell { display: flex; flex-direction: column; height: 100vh; }
+      #nav-bar { flex: none; }
+      #app-content { display: flex; flex-direction: column; flex: 1; min-height: 0; background: #1a1a1a; }
+
+      /* Core play's own top bar (src/ui/play/topbar.ts) — also reused by
+         the Deployment screen's own header (src/ui/deployment.ts,
+         renderDeploymentTopbar), so it's populated in both phases; empty
+         only while the Order of Battle screen (Stage 4) is showing instead
+         of the board. */
+      #play-topbar:empty { display: none; }
+
+      /* The 3-column play layout (log / board / inspector). Column widths
+         are set imperatively in main.ts (log column collapsed to 0 during
+         deployment in favor of #deploy-sidebar, and when toggled shut;
+         the inspector column stays visible in both phases) since they
+         depend on game-state, not just CSS. */
+      #play-grid { position: relative; flex: 1; min-height: 0; display: grid; }
+      #play-log { min-width: 0; overflow: hidden; display: flex; flex-direction: column; background: var(--color-bg); }
+      /* Same grid cell as #play-log (column 1, row 1) — the two are shown/
+         hidden by main.ts depending on deployment vs. play phase, never
+         both at once, so they can share the column-1 width the grid track
+         is given. */
+      #deploy-sidebar { grid-column: 1; grid-row: 1; min-width: 0; overflow-y: auto; background: var(--color-bg); display: none; }
+      /* No padding directly on #play-inspector itself — box-sizing:border-box
+         still can't shrink a padded box's rendered width below its padding,
+         so a fixed-content grid item's track collapsing to 0 (were this
+         column ever hidden) would otherwise leave a visible sliver.
+         inspector.ts puts the padding on an inner wrapper instead. */
+      #play-inspector { min-width: 0; overflow-y: auto; border-left: 1px solid var(--color-divider); background: var(--color-bg); }
+
+      /* -- The board column: unchanged dark canvas + the pre-overhaul
+         overlay panels (#ui/#view-controls), now scoped to this column
+         instead of the whole viewport. #ui carries any in-progress
+         play-phase pending-action hint (Stage 2 deliberately keeps those as
+         a small non-blocking box rather than moving them into the order
+         popover — see orderModal.ts's doc comment — except Redeploy's
+         formation/facing step and March's arrival-facing step, which each
+         got their own popover instead, #redeploy-modal-overlay/
+         #march-facing-modal-overlay below); #ui is unused during deployment
+         now (Stage 3 moved that to #deploy-sidebar/#deploy-panel below). -- */
+      #board-col { position: relative; overflow: hidden; background: #1a1a1a; }
+      #app { width: 100%; height: 100%; }
+      /* Deployment's hex→formation→facing floating panel
+         (src/ui/deployment.ts, renderDeploymentPanel) — same wrapper
+         pattern as #order-modal-overlay below: a full-bleed, click-through
+         layer whose one real child opts back into pointer events. */
+      #deploy-panel { position: absolute; inset: 0; pointer-events: none; }
+      #deploy-panel:empty { display: none; }
+      #ui {
+        position: absolute; top: 12px; left: 12px; width: 260px;
+        background: rgba(20, 20, 20, 0.88); color: #e0d8c0; border: 1px solid #4a4a4a;
+        border-radius: 6px; padding: 10px; font-size: 13px; pointer-events: auto;
+      }
+      #ui:empty { display: none; }
+      #ui h2 { margin: 0 0 6px; font-size: 14px; color: #ffdd55; }
+      #ui .row { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+      #ui .unit-list { display: flex; flex-direction: column; gap: 4px; margin: 6px 0; max-height: 55vh; overflow-y: auto; }
+      #ui .unit-list button { width: 100%; text-align: left; }
+      #ui .unit-list button.placed { border-color: #7fbf7f; }
+      #ui button, #view-controls button {
+        background: #333; color: #e0d8c0; border: 1px solid #555; border-radius: 4px;
+        padding: 5px 8px; font-size: 12px; cursor: pointer;
+      }
+      #ui button:hover, #view-controls button:hover { background: #444; }
+      #ui button.active { background: #6b5b1a; border-color: #ffdd55; }
+      #ui button:disabled { opacity: 0.4; cursor: default; }
+      #ui .arrow { transform-origin: center; display: inline-block; }
+      #ui .hint { color: #999; font-size: 11px; margin-top: 4px; }
+      #ui .empty { color: #999; }
+      /* Track B stage B-5: a one-line status banner for a network game's own
+         connection — "Connecting…"/"Reconnecting…"/the last server-rejected
+         action's error message. Empty (and hidden) in local hotseat and
+         whenever a network game has nothing to report. */
+      #network-banner {
+        position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+        background: rgba(60, 20, 20, 0.92); color: #f2c9c9; border: 1px solid #8a3a3a;
+        border-radius: 6px; padding: 6px 14px; font-size: 12px; pointer-events: none;
+        max-width: 70%; text-align: center; z-index: 4;
+      }
+      #view-controls {
+        position: absolute; bottom: 12px; right: 12px; display: flex; gap: 6px;
+        background: rgba(20, 20, 20, 0.88); border: 1px solid #4a4a4a; border-radius: 6px;
+        padding: 8px; pointer-events: auto;
+      }
+      #log-toggle {
+        position: absolute; left: 0; top: 50%; transform: translateY(-50%);
+        background: rgba(20, 20, 20, 0.88); color: #e0d8c0; border: 1px solid #4a4a4a; border-left: none;
+        padding: 10px 4px; cursor: pointer; font-size: 12px; z-index: 2;
+      }
+      #log-toggle:empty { display: none; }
+
+      /* End Turn confirm — still a real full-screen dimmed dialog (unlike
+         the order popover below), no feedback against this one. */
+      #modal-overlay { position: absolute; inset: 0; pointer-events: none; }
+      #modal-overlay:empty { display: none; }
+      #modal-overlay > * { pointer-events: auto; }
+
+      /* Order popover (src/ui/play/orderModal.ts) — anchored to the
+         selected unit's own on-screen position, so it lives inside
+         #board-col (position:relative) rather than as a viewport-fixed
+         overlay; main.ts computes the anchor in #board-col-relative pixels.
+         No backdrop dimming — human feedback 2026-08-17: the popover
+         shouldn't block or obscure the rest of the board. z-index above
+         #log-toggle so it never loses a stacking fight near the board's
+         left edge. */
+      #order-modal-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+      #order-modal-overlay:empty { display: none; }
+
+      /* Redeploy's formation/facing popover (src/ui/play/redeployModal.ts)
+         — same wrapper pattern and z-index as #order-modal-overlay above;
+         the two are never populated at once (Redeploy clears selection's
+         order popover by setting `pending`, see orderModalAnchor's callers
+         in main.ts), so there's no stacking conflict between them. */
+      #redeploy-modal-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+      #redeploy-modal-overlay:empty { display: none; }
+
+      /* March's arrival-facing popover (src/ui/play/marchFacingModal.ts) —
+         same wrapper pattern and z-index as #order-modal-overlay above;
+         only ever populated while `pending.kind === "marchFacing"`, which
+         implies no `pending`-less order popover and no Redeploy popover at
+         the same time, so no stacking conflict with either. */
+      #march-facing-modal-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+      #march-facing-modal-overlay:empty { display: none; }
+
+      /* Order of Battle screen (Stage 4, src/ui/orderOfBattle.ts) — a
+         full-width screen shown instead of #play-topbar/#play-grid (toggled
+         by main.ts off the Router's current screen), not a modal. */
+      #oob-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
+
+      /* Menu screen (Track B stage B-2, src/ui/menu.ts) — same
+         full-width-instead-of-#play-topbar/#play-grid pattern as #oob-screen
+         above, also hosting the Login screen inline when signed out. */
+      #menu-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
+
+      /* Scenario picker / Create-game screen (Track B stage B-3b,
+         src/ui/scenarioPicker.ts) — same pattern as #menu-screen above. */
+      #scenario-picker-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
+
+      /* Join screen (Track B stage B-4, src/ui/join.ts) — same pattern as
+         #menu-screen above. */
+      #join-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
+
+      /* Admin screen (Track B stage B-6, src/ui/admin.ts) — same pattern as
+         #menu-screen above. */
+      #admin-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
+    </style>
+    <script type="module" crossorigin src="./assets/index-CXi2FL4u.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-Bd63uCpz.css">
+  </head>
+  <body>
+    <div id="app-shell">
+      <header id="nav-bar"></header>
+      <div id="app-content">
+        <div id="play-topbar"></div>
+        <div id="play-grid">
+          <div id="play-log"></div>
+          <div id="deploy-sidebar"></div>
+          <div id="board-col">
+            <div id="app"></div>
+            <div id="network-banner" style="display:none;"></div>
+            <div id="ui"></div>
+            <div id="deploy-panel"></div>
+            <div id="view-controls"></div>
+            <button id="log-toggle"></button>
+            <div id="order-modal-overlay"></div>
+            <div id="redeploy-modal-overlay"></div>
+            <div id="march-facing-modal-overlay"></div>
+          </div>
+          <div id="play-inspector"></div>
+        </div>
+        <div id="oob-screen"></div>
+        <div id="menu-screen"></div>
+        <div id="scenario-picker-screen"></div>
+        <div id="join-screen"></div>
+        <div id="admin-screen"></div>
+      </div>
+      <div id="modal-overlay"></div>
+    </div>
+  </body>
+</html>
