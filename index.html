@@ -78,16 +78,23 @@
       #ui .arrow { transform-origin: center; display: inline-block; }
       #ui .hint { color: #999; font-size: 11px; margin-top: 4px; }
       #ui .empty { color: #999; }
-      /* Track B stage B-5: a one-line status banner for a network game's own
+      /* Shared red top-of-board banner look. Track B stage B-5's
+         #network-banner (a one-line status for a network game's own
          connection — "Connecting…"/"Reconnecting…"/the last server-rejected
-         action's error message. Empty (and hidden) in local hotseat and
-         whenever a network game has nothing to report. */
-      #network-banner {
+         action's error message; empty/hidden in local hotseat and whenever a
+         network game has nothing to report) and #action-banner (human-
+         requested 2026-08-24: transient in-game notices like "Already
+         activated this turn" — auto-fades after a few seconds, or dismisses
+         immediately on click) both use it. */
+      .top-banner {
         position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
         background: rgba(60, 20, 20, 0.92); color: #f2c9c9; border: 1px solid #8a3a3a;
-        border-radius: 6px; padding: 6px 14px; font-size: 12px; pointer-events: none;
+        border-radius: 6px; padding: 6px 14px; font-size: 12px;
         max-width: 70%; text-align: center; z-index: 4;
+        transition: opacity 0.4s ease;
       }
+      #network-banner { pointer-events: none; }
+      #action-banner { pointer-events: auto; cursor: pointer; }
       #view-controls {
         position: absolute; bottom: 12px; right: 12px; display: flex; gap: 6px;
         background: rgba(20, 20, 20, 0.88); border: 1px solid #4a4a4a; border-radius: 6px;
@@ -133,6 +140,41 @@
       #march-facing-modal-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
       #march-facing-modal-overlay:empty { display: none; }
 
+      /* Leader-order popover (src/ui/play/leaderOrderModal.ts, Phase 5
+         Stage 7 increment 2) — same wrapper pattern and z-index as
+         #order-modal-overlay above; mutually exclusive with it (selecting a
+         leader clears the selected unit and vice versa, see main.ts's
+         selectLeader/selectUnit), so no stacking conflict between them. */
+      #leader-order-modal-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+      #leader-order-modal-overlay:empty { display: none; }
+
+      /* Replace-leader wizard (src/ui/play/replaceLeaderModal.ts, Phase 5
+         Stage 7 increment 2) — same wrapper pattern and z-index as
+         #order-modal-overlay above; opening it clears both selectedUnitId
+         and selectedLeaderId (main.ts's openReplaceLeaderWizard), so it's
+         never populated alongside either of the popovers above. */
+      #replace-leader-modal-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+      #replace-leader-modal-overlay:empty { display: none; }
+
+      /* Leader accompany/drop-off popover (src/ui/play/leaderAccompanyModal.ts,
+         2026-08-24) — same wrapper pattern and z-index as
+         #march-facing-modal-overlay above; only ever populated while
+         `pending.kind === "leaderAccompany"`, which (like marchFacing) only
+         ever follows a March/Advance-Retire destination pick, so no
+         stacking conflict with the other popovers here. */
+      #leader-accompany-modal-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+      #leader-accompany-modal-overlay:empty { display: none; }
+
+      /* Skirmisher-recall confirm popover (src/ui/play/skirmisherRecallModal.ts,
+         human-reported 2026-08-24 bug fix) — same shell/z-index as
+         #leader-accompany-modal-overlay above; only ever populated while
+         `pending.kind === "confirmSkirmisherRecall"`, which precedes
+         leaderAccompany in the same March/Advance-Retire flow, so no
+         stacking conflict there either. */
+      #skirmisher-recall-modal-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+      #skirmisher-recall-modal-overlay:empty { display: none; }
+
+
       /* Order of Battle screen (Stage 4, src/ui/orderOfBattle.ts) — a
          full-width screen shown instead of #play-topbar/#play-grid (toggled
          by main.ts off the Router's current screen), not a modal. */
@@ -155,8 +197,8 @@
          #menu-screen above. */
       #admin-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
     </style>
-    <script type="module" crossorigin src="./assets/index-DWd7DepL.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-DDxdx0ZN.css">
+    <script type="module" crossorigin src="./assets/index-D77fQ2Ja.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-BZken-vl.css">
   </head>
   <body>
     <div id="app-shell">
@@ -168,7 +210,8 @@
           <div id="deploy-sidebar"></div>
           <div id="board-col">
             <div id="app"></div>
-            <div id="network-banner" style="display:none;"></div>
+            <div id="network-banner" class="top-banner" style="display:none;"></div>
+            <div id="action-banner" class="top-banner" style="display:none;"></div>
             <div id="ui"></div>
             <div id="deploy-panel"></div>
             <div id="view-controls"></div>
@@ -176,6 +219,10 @@
             <div id="order-modal-overlay"></div>
             <div id="redeploy-modal-overlay"></div>
             <div id="march-facing-modal-overlay"></div>
+            <div id="leader-order-modal-overlay"></div>
+            <div id="replace-leader-modal-overlay"></div>
+            <div id="leader-accompany-modal-overlay"></div>
+            <div id="skirmisher-recall-modal-overlay"></div>
           </div>
           <div id="play-inspector"></div>
         </div>
