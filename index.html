@@ -122,6 +122,17 @@
       #special-rules-modal-overlay:empty { display: none; }
       #special-rules-modal-overlay > * { pointer-events: auto; }
 
+      /* Skirmish Fire target-picker modal (src/ui/play/skirmishFireModal.ts,
+         human-requested 2026-08-25 replacement for the old hover-anchored
+         per-hex dialog, which was too easy to lose with a small mouse
+         movement) — same centered/dimmed shell as #modal-overlay above,
+         since a plain tile click was already a no-op for the whole
+         `pending.kind === "skirmishFire"` phase (targeting is entirely
+         menu-driven, not board-click-driven). */
+      #skirmish-fire-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
+      #skirmish-fire-modal-overlay:empty { display: none; }
+      #skirmish-fire-modal-overlay > * { pointer-events: auto; }
+
       /* Order popover (src/ui/play/orderModal.ts) — anchored to the
          selected unit's own on-screen position, so it lives inside
          #board-col (position:relative) rather than as a viewport-fixed
@@ -211,8 +222,8 @@
          production bundle; main.ts only mounts it under import.meta.env.DEV. */
       #scenario-author-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
     </style>
-    <script type="module" crossorigin src="./assets/index-BobPp1NC.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-BZken-vl.css">
+    <script type="module" crossorigin src="./assets/index-CLxnDBRd.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-D4dY1SHT.css">
   </head>
   <body>
     <div id="app-shell">
@@ -249,6 +260,7 @@
       </div>
       <div id="modal-overlay"></div>
       <div id="special-rules-modal-overlay"></div>
+      <div id="skirmish-fire-modal-overlay"></div>
     </div>
   </body>
 </html>
