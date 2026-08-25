@@ -113,6 +113,15 @@
       #modal-overlay:empty { display: none; }
       #modal-overlay > * { pointer-events: auto; }
 
+      /* Scenario Briefing / Special Rules viewer (Phase 5.5 Stage 7,
+         src/ui/play/specialRulesModal.ts) — a separate overlay from
+         #modal-overlay above because it's opened voluntarily by the player
+         at any time (topbar button), not a game-state interrupt, so it
+         doesn't participate in that overlay's mutual-exclusivity logic. */
+      #special-rules-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
+      #special-rules-modal-overlay:empty { display: none; }
+      #special-rules-modal-overlay > * { pointer-events: auto; }
+
       /* Order popover (src/ui/play/orderModal.ts) — anchored to the
          selected unit's own on-screen position, so it lives inside
          #board-col (position:relative) rather than as a viewport-fixed
@@ -196,8 +205,13 @@
       /* Admin screen (Track B stage B-6, src/ui/admin.ts) — same pattern as
          #menu-screen above. */
       #admin-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
+
+      /* Phase 5.5 scenario-authoring tool (dev-only, src/ui/scenarioAuthor.ts)
+         — same pattern as #menu-screen above. Never linked to in the
+         production bundle; main.ts only mounts it under import.meta.env.DEV. */
+      #scenario-author-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
     </style>
-    <script type="module" crossorigin src="./assets/index-CaVHGMQk.js"></script>
+    <script type="module" crossorigin src="./assets/index-BobPp1NC.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-BZken-vl.css">
   </head>
   <body>
@@ -231,8 +245,10 @@
         <div id="scenario-picker-screen"></div>
         <div id="join-screen"></div>
         <div id="admin-screen"></div>
+        <div id="scenario-author-screen"></div>
       </div>
       <div id="modal-overlay"></div>
+      <div id="special-rules-modal-overlay"></div>
     </div>
   </body>
 </html>
