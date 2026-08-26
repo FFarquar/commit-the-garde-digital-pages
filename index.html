@@ -168,6 +168,18 @@
       #leader-order-modal-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
       #leader-order-modal-overlay:empty { display: none; }
 
+      /* Army HQ order popover (src/ui/play/armyHqOrderModal.ts, Phase 6
+         Stage 7 increment 2) — same wrapper pattern/z-index/mutual-exclusion
+         shape as #leader-order-modal-overlay above (see main.ts's
+         selectArmyHq/selectLeader/selectUnit). */
+      #army-hq-order-modal-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+      #army-hq-order-modal-overlay:empty { display: none; }
+
+      /* Exchange picker (src/ui/play/exchangeLeaderModal.ts, Phase 6 Stage 7
+         increment 3) — same wrapper pattern/z-index as the popovers above. */
+      #exchange-leader-modal-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+      #exchange-leader-modal-overlay:empty { display: none; }
+
       /* Replace-leader wizard (src/ui/play/replaceLeaderModal.ts, Phase 5
          Stage 7 increment 2) — same wrapper pattern and z-index as
          #order-modal-overlay above; opening it clears both selectedUnitId
@@ -222,7 +234,7 @@
          production bundle; main.ts only mounts it under import.meta.env.DEV. */
       #scenario-author-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
     </style>
-    <script type="module" crossorigin src="./assets/index-CLxnDBRd.js"></script>
+    <script type="module" crossorigin src="./assets/index-2IHdp-P_.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-D4dY1SHT.css">
   </head>
   <body>
@@ -245,6 +257,8 @@
             <div id="redeploy-modal-overlay"></div>
             <div id="march-facing-modal-overlay"></div>
             <div id="leader-order-modal-overlay"></div>
+            <div id="army-hq-order-modal-overlay"></div>
+            <div id="exchange-leader-modal-overlay"></div>
             <div id="replace-leader-modal-overlay"></div>
             <div id="leader-accompany-modal-overlay"></div>
             <div id="skirmisher-recall-modal-overlay"></div>
