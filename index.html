@@ -17,8 +17,22 @@
          the Deployment screen's own header (src/ui/deployment.ts,
          renderDeploymentTopbar), so it's populated in both phases; empty
          only while the Order of Battle screen (Stage 4) is showing instead
-         of the board. */
+         of the board. `display: flex` lives here (not just in the render
+         functions' own inline `style.cssText`) so `updateScreenVisibility`'s
+         `style.display = ""` — clearing the "none" it sets on full-width
+         screens — has a real stylesheet value to fall back to instead of a
+         bare `<div>`'s default `block` (which stacks the bar's children
+         vertically instead of in a row). */
+      #play-topbar { display: flex; }
       #play-topbar:empty { display: none; }
+
+      /* Turn order ribbon (src/ui/play/turnOrderRibbon.ts) — passive 6-step
+         Army Command Sheet checklist shown only during the play phase
+         (empty, thus hidden, during deployment/Order of Battle/game-over,
+         same screens #play-topbar itself blanks on). Same `display: flex`
+         fallback reasoning as #play-topbar above. */
+      #turn-order-ribbon { display: flex; }
+      #turn-order-ribbon:empty { display: none; }
 
       /* The 3-column play layout (log / board / inspector). Column widths
          are set imperatively in main.ts (log column collapsed to 0 during
@@ -234,14 +248,15 @@
          production bundle; main.ts only mounts it under import.meta.env.DEV. */
       #scenario-author-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
     </style>
-    <script type="module" crossorigin src="./assets/index-jM_ernOa.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-D4dY1SHT.css">
+    <script type="module" crossorigin src="./assets/index-D1d-K--J.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-CBR39GVn.css">
   </head>
   <body>
     <div id="app-shell">
       <header id="nav-bar"></header>
       <div id="app-content">
         <div id="play-topbar"></div>
+        <div id="turn-order-ribbon"></div>
         <div id="play-grid">
           <div id="play-log"></div>
           <div id="deploy-sidebar"></div>
