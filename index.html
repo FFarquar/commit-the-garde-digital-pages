@@ -194,6 +194,15 @@
       #exchange-leader-modal-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
       #exchange-leader-modal-overlay:empty { display: none; }
 
+      /* Reserve Commitment/Flank March wizard (src/ui/play/reserveCommitmentModal.ts,
+         Phase 6 Stage 7 increment 4) — same wrapper pattern/z-index as the
+         popovers above; opened from the Army HQ popover once
+         `state.pending` enters one of its own kinds (renderArmyHqOrderModalPanel
+         hides its own popover for the same HQ while that's true, so the two
+         never stack). */
+      #reserve-commitment-modal-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+      #reserve-commitment-modal-overlay:empty { display: none; }
+
       /* Replace-leader wizard (src/ui/play/replaceLeaderModal.ts, Phase 5
          Stage 7 increment 2) — same wrapper pattern and z-index as
          #order-modal-overlay above; opening it clears both selectedUnitId
@@ -248,7 +257,7 @@
          production bundle; main.ts only mounts it under import.meta.env.DEV. */
       #scenario-author-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
     </style>
-    <script type="module" crossorigin src="./assets/index-B8PDldu_.js"></script>
+    <script type="module" crossorigin src="./assets/index-CuZGazDA.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-CBR39GVn.css">
   </head>
   <body>
@@ -274,6 +283,7 @@
             <div id="leader-order-modal-overlay"></div>
             <div id="army-hq-order-modal-overlay"></div>
             <div id="exchange-leader-modal-overlay"></div>
+            <div id="reserve-commitment-modal-overlay"></div>
             <div id="replace-leader-modal-overlay"></div>
             <div id="leader-accompany-modal-overlay"></div>
             <div id="skirmisher-recall-modal-overlay"></div>
