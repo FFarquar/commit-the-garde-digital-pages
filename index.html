@@ -45,7 +45,13 @@
          hidden by main.ts depending on deployment vs. play phase, never
          both at once, so they can share the column-1 width the grid track
          is given. */
-      #deploy-sidebar { grid-column: 1; grid-row: 1; min-width: 0; overflow-y: auto; background: var(--color-bg); display: none; }
+      /* `scrollbar-gutter: stable` reserves the vertical scrollbar's track
+         width even under overlay-style scrollbars (this app's default dev/
+         test Chromium among them) — without it, an overlay scrollbar floats
+         on top of the content instead of carving out space, covering the
+         rightmost text (e.g. a row's "Not yet placed" status) in the list
+         below. Human-reported 2026-08-28. */
+      #deploy-sidebar { grid-column: 1; grid-row: 1; min-width: 0; overflow-y: auto; scrollbar-gutter: stable; background: var(--color-bg); display: none; }
       /* No padding directly on #play-inspector itself — box-sizing:border-box
          still can't shrink a padded box's rendered width below its padding,
          so a fixed-content grid item's track collapsing to 0 (were this
@@ -257,7 +263,7 @@
          production bundle; main.ts only mounts it under import.meta.env.DEV. */
       #scenario-author-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
     </style>
-    <script type="module" crossorigin src="./assets/index-ByCXXi3-.js"></script>
+    <script type="module" crossorigin src="./assets/index-XSs5BlAw.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-CBR39GVn.css">
   </head>
   <body>
