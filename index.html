@@ -266,6 +266,11 @@
          by main.ts off the Router's current screen), not a modal. */
       #oob-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
 
+      /* Victory screen (src/ui/victoryScreen.ts) — same full-width-instead-
+         of-#play-topbar/#play-grid pattern as #oob-screen above; shows p.4's
+         three game-end conditions and live progress toward each. */
+      #victory-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
+
       /* Menu screen (Track B stage B-2, src/ui/menu.ts) — same
          full-width-instead-of-#play-topbar/#play-grid pattern as #oob-screen
          above, also hosting the Login screen inline when signed out. */
@@ -288,7 +293,7 @@
          production bundle; main.ts only mounts it under import.meta.env.DEV. */
       #scenario-author-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
     </style>
-    <script type="module" crossorigin src="./assets/index-NYFEvJqj.js"></script>
+    <script type="module" crossorigin src="./assets/index-DvdEvOnB.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-CBR39GVn.css">
   </head>
   <body>
@@ -322,6 +327,7 @@
           <div id="play-inspector"></div>
         </div>
         <div id="oob-screen"></div>
+        <div id="victory-screen"></div>
         <div id="menu-screen"></div>
         <div id="scenario-picker-screen"></div>
         <div id="join-screen"></div>
