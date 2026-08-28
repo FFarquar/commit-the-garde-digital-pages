@@ -153,6 +153,31 @@
       #skirmish-fire-modal-overlay:empty { display: none; }
       #skirmish-fire-modal-overlay > * { pointer-events: auto; }
 
+      /* Sequential turn-phase walkthrough's own dialogs (src/ui/play/
+         armyMoraleReportModal.ts, leaderPhaseModal.ts, phaseInstructionModal.ts,
+         passageOfTimeReportModal.ts) — same centered/dimmed shell as
+         #modal-overlay above, and main.ts's renderCurrentPhaseModal already
+         guarantees at most one of these four is ever populated at once (one
+         per `currentPhase`, mutually exclusive with #modal-overlay's own
+         reactionWindow/assaultSkirmisherChoice/leaderFallenNotice/
+         yourTurnNotice tier too — see renderEndTurnModal). Kept as separate
+         elements (not sharing one overlay) rather than risk one dialog's own
+         null-clear wiping out another rendered into the same container the
+         same render() pass, same reasoning as every other modal pairing on
+         this page. */
+      #army-morale-report-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
+      #army-morale-report-modal-overlay:empty { display: none; }
+      #army-morale-report-modal-overlay > * { pointer-events: auto; }
+      #leader-phase-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
+      #leader-phase-modal-overlay:empty { display: none; }
+      #leader-phase-modal-overlay > * { pointer-events: auto; }
+      #phase-instruction-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
+      #phase-instruction-modal-overlay:empty { display: none; }
+      #phase-instruction-modal-overlay > * { pointer-events: auto; }
+      #passage-of-time-report-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
+      #passage-of-time-report-modal-overlay:empty { display: none; }
+      #passage-of-time-report-modal-overlay > * { pointer-events: auto; }
+
       /* Order popover (src/ui/play/orderModal.ts) — anchored to the
          selected unit's own on-screen position, so it lives inside
          #board-col (position:relative) rather than as a viewport-fixed
@@ -263,7 +288,7 @@
          production bundle; main.ts only mounts it under import.meta.env.DEV. */
       #scenario-author-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
     </style>
-    <script type="module" crossorigin src="./assets/index-Bly5_tx4.js"></script>
+    <script type="module" crossorigin src="./assets/index-DQeRyxfc.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-CBR39GVn.css">
   </head>
   <body>
@@ -306,6 +331,10 @@
       <div id="modal-overlay"></div>
       <div id="special-rules-modal-overlay"></div>
       <div id="skirmish-fire-modal-overlay"></div>
+      <div id="army-morale-report-modal-overlay"></div>
+      <div id="leader-phase-modal-overlay"></div>
+      <div id="phase-instruction-modal-overlay"></div>
+      <div id="passage-of-time-report-modal-overlay"></div>
     </div>
   </body>
 </html>
