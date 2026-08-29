@@ -178,6 +178,14 @@
       #passage-of-time-report-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
       #passage-of-time-report-modal-overlay:empty { display: none; }
       #passage-of-time-report-modal-overlay > * { pointer-events: auto; }
+      /* reserveCheckReportModal.ts — same centered/dimmed shell as the four
+         above, but not driven by `currentPhase` (Commit Reserves allows
+         several sequential staff-check attempts within the one phase), so
+         it's a separate overlay rather than a fifth mutually-exclusive
+         branch of renderCurrentPhaseModal. */
+      #reserve-check-report-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
+      #reserve-check-report-modal-overlay:empty { display: none; }
+      #reserve-check-report-modal-overlay > * { pointer-events: auto; }
 
       /* Order popover (src/ui/play/orderModal.ts) — anchored to the
          selected unit's own on-screen position, so it lives inside
@@ -294,7 +302,7 @@
          production bundle; main.ts only mounts it under import.meta.env.DEV. */
       #scenario-author-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
     </style>
-    <script type="module" crossorigin src="./assets/index-ClzWcm3Z.js"></script>
+    <script type="module" crossorigin src="./assets/index-B5RmlKof.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-CBR39GVn.css">
   </head>
   <body>
@@ -342,6 +350,7 @@
       <div id="leader-phase-modal-overlay"></div>
       <div id="phase-instruction-modal-overlay"></div>
       <div id="passage-of-time-report-modal-overlay"></div>
+      <div id="reserve-check-report-modal-overlay"></div>
     </div>
   </body>
 </html>
