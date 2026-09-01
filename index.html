@@ -27,6 +27,14 @@
       #play-topbar { display: flex; }
       #play-topbar:empty { display: none; }
 
+      /* Battle Time Bar (src/ui/play/battleTimeBar.ts) — the graphical
+         Dawn/Day/Twilight/Night timeline that replaced the old plain-text
+         clock readout, docked directly below #play-topbar. Same "reused by
+         both play and deployment phases, empty (thus hidden) whenever
+         #play-topbar itself is" pattern as #play-topbar/#turn-order-ribbon. */
+      #battle-time-bar { display: flex; }
+      #battle-time-bar:empty { display: none; }
+
       /* Turn order ribbon (src/ui/play/turnOrderRibbon.ts) — passive 6-step
          Army Command Sheet checklist shown only during the play phase
          (empty, thus hidden, during deployment/Order of Battle/game-over,
@@ -305,14 +313,15 @@
          production bundle; main.ts only mounts it under import.meta.env.DEV. */
       #scenario-author-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
     </style>
-    <script type="module" crossorigin src="./assets/index-gDay1nv-.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-RH2k4d7-.css">
+    <script type="module" crossorigin src="./assets/index-DWEF9K1I.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-griJQ290.css">
   </head>
   <body>
     <div id="app-shell">
       <header id="nav-bar"></header>
       <div id="app-content">
         <div id="play-topbar"></div>
+        <div id="battle-time-bar"></div>
         <div id="turn-order-ribbon"></div>
         <div id="play-grid">
           <div id="play-log"></div>
