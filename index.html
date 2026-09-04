@@ -195,6 +195,14 @@
       #phase-instruction-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
       #phase-instruction-modal-overlay:empty { display: none; }
       #phase-instruction-modal-overlay > * { pointer-events: auto; }
+      /* endActivationWarningModal.ts — "you still have units to activate"
+         confirm raised by the topbar's End Phase click during Phase 5. Not
+         driven by `currentPhase` (it's a voluntary confirm on top of the
+         activation phase, not a phase of its own), so its own overlay rather
+         than a branch of renderCurrentPhaseModal. */
+      #end-activation-warning-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
+      #end-activation-warning-modal-overlay:empty { display: none; }
+      #end-activation-warning-modal-overlay > * { pointer-events: auto; }
       #passage-of-time-report-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
       #passage-of-time-report-modal-overlay:empty { display: none; }
       #passage-of-time-report-modal-overlay > * { pointer-events: auto; }
@@ -322,7 +330,7 @@
          production bundle; main.ts only mounts it under import.meta.env.DEV. */
       #scenario-author-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
     </style>
-    <script type="module" crossorigin src="./assets/index-28ifXF6A.js"></script>
+    <script type="module" crossorigin src="./assets/index-D6k5rvfB.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-Cf3tRmyv.css">
   </head>
   <body>
@@ -372,6 +380,7 @@
       <div id="dice-roll-modal-overlay"></div>
       <div id="leader-phase-modal-overlay"></div>
       <div id="phase-instruction-modal-overlay"></div>
+      <div id="end-activation-warning-modal-overlay"></div>
       <div id="passage-of-time-report-modal-overlay"></div>
       <div id="reserve-check-report-modal-overlay"></div>
     </div>
