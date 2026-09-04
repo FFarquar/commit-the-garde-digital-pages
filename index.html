@@ -162,6 +162,15 @@
       #skirmish-fire-modal-overlay:empty { display: none; }
       #skirmish-fire-modal-overlay > * { pointer-events: auto; }
 
+      /* Hit-allocation picker (src/ui/play/killAllocationModal.ts) — shown
+         when a Fire/Close Combat result must be split between several enemy
+         units stacked in one hex. Same centered/dimmed shell as
+         #skirmish-fire-modal-overlay above; its own overlay so a sibling
+         modal's null-clear can't wipe it mid-render. */
+      #kill-allocation-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
+      #kill-allocation-modal-overlay:empty { display: none; }
+      #kill-allocation-modal-overlay > * { pointer-events: auto; }
+
       /* Sequential turn-phase walkthrough's own dialogs (src/ui/play/
          armyMoraleReportModal.ts, leaderPhaseModal.ts, phaseInstructionModal.ts,
          passageOfTimeReportModal.ts) — same centered/dimmed shell as
@@ -313,8 +322,8 @@
          production bundle; main.ts only mounts it under import.meta.env.DEV. */
       #scenario-author-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
     </style>
-    <script type="module" crossorigin src="./assets/index-B2ikqpcy.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-CASCzykB.css">
+    <script type="module" crossorigin src="./assets/index-ekR4PKMs.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-Cf3tRmyv.css">
   </head>
   <body>
     <div id="app-shell">
@@ -358,6 +367,7 @@
       <div id="modal-overlay"></div>
       <div id="special-rules-modal-overlay"></div>
       <div id="skirmish-fire-modal-overlay"></div>
+      <div id="kill-allocation-modal-overlay"></div>
       <div id="army-morale-report-modal-overlay"></div>
       <div id="dice-roll-modal-overlay"></div>
       <div id="leader-phase-modal-overlay"></div>
