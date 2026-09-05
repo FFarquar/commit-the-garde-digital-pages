@@ -11,7 +11,7 @@ Drop the real sound effect files here, named exactly as below (referenced by [sr
 
 A leader Falling plays its own `SoundId` (`leaderFallen`) but currently points at `bugle.mp3` too (human-requested 2026-08-24: reuse the existing cue for now). Drop a `leaderFallen.mp3` here and repoint `SOUND_FILES.leaderFallen` in soundManager.ts to give it a real, distinct sound later.
 
-The five action sounds above (`melee`, `rally`, `rout`, `formation`, `activation`) are wired to callers throughout src/main.ts (local hotseat) and server/handlers/ws/game-action.ts's `SOUND_HINT_BY_KIND` (network games), but none of those five files exist yet.
+The five action sounds above (`melee`, `rally`, `rout`, `formation`, `activation`) are wired to callers throughout src/main.ts (local hotseat) and server/handlers/ws/game-action.ts's `SOUND_HINT_BY_KIND` (network games). `melee`, `rally`, `rout`, and `activation` now have real files; `formation.mp3` doesn't exist yet.
 
 Until a file exists, `playSound()` fails silently (caught) — no error, just no sound.
 
