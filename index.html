@@ -203,6 +203,12 @@
       #end-activation-warning-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
       #end-activation-warning-modal-overlay:empty { display: none; }
       #end-activation-warning-modal-overlay > * { pointer-events: auto; }
+      /* exitBoardConfirmModal.ts — "exit the board?" confirm raised by the
+         order modal's Corunna-only (Free) "Exit Board" action, same
+         voluntary-confirm-on-top-of-a-phase pattern as the warning above. */
+      #exit-board-confirm-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
+      #exit-board-confirm-modal-overlay:empty { display: none; }
+      #exit-board-confirm-modal-overlay > * { pointer-events: auto; }
       #passage-of-time-report-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
       #passage-of-time-report-modal-overlay:empty { display: none; }
       #passage-of-time-report-modal-overlay > * { pointer-events: auto; }
@@ -330,7 +336,7 @@
          production bundle; main.ts only mounts it under import.meta.env.DEV. */
       #scenario-author-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
     </style>
-    <script type="module" crossorigin src="./assets/index-ChjfeQXt.js"></script>
+    <script type="module" crossorigin src="./assets/index-Bve4NGCh.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-Cf3tRmyv.css">
   </head>
   <body>
@@ -381,6 +387,7 @@
       <div id="leader-phase-modal-overlay"></div>
       <div id="phase-instruction-modal-overlay"></div>
       <div id="end-activation-warning-modal-overlay"></div>
+      <div id="exit-board-confirm-modal-overlay"></div>
       <div id="passage-of-time-report-modal-overlay"></div>
       <div id="reserve-check-report-modal-overlay"></div>
     </div>
