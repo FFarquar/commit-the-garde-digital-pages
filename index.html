@@ -216,6 +216,12 @@
       #exit-board-confirm-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
       #exit-board-confirm-modal-overlay:empty { display: none; }
       #exit-board-confirm-modal-overlay > * { pointer-events: auto; }
+      /* withdrawConfirmModal.ts / wfbResultModal.ts — TB-time handshake A6
+         (Withdraw From Battle): the top-bar button's confirm, and the result
+         dialog shown to both players. Same voluntary-dialog-on-top pattern. */
+      #withdraw-confirm-modal-overlay, #wfb-result-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
+      #withdraw-confirm-modal-overlay:empty, #wfb-result-modal-overlay:empty { display: none; }
+      #withdraw-confirm-modal-overlay > *, #wfb-result-modal-overlay > * { pointer-events: auto; }
       #passage-of-time-report-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
       #passage-of-time-report-modal-overlay:empty { display: none; }
       #passage-of-time-report-modal-overlay > * { pointer-events: auto; }
@@ -343,7 +349,7 @@
          production bundle; main.ts only mounts it under import.meta.env.DEV. */
       #scenario-author-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
     </style>
-    <script type="module" crossorigin src="./assets/index-tuFvBcqq.js"></script>
+    <script type="module" crossorigin src="./assets/index-gptg26fi.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-B-PL3YWv.css">
   </head>
   <body>
@@ -396,6 +402,8 @@
       <div id="phase-instruction-modal-overlay"></div>
       <div id="end-activation-warning-modal-overlay"></div>
       <div id="exit-board-confirm-modal-overlay"></div>
+      <div id="withdraw-confirm-modal-overlay"></div>
+      <div id="wfb-result-modal-overlay"></div>
       <div id="passage-of-time-report-modal-overlay"></div>
       <div id="reserve-check-report-modal-overlay"></div>
     </div>
