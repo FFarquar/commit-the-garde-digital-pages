@@ -49,7 +49,15 @@
          the inspector column stays visible in both phases) since they
          depend on game-state, not just CSS. */
       #play-grid { position: relative; flex: 1; min-height: 0; display: grid; }
-      #play-log { min-width: 0; overflow: hidden; display: flex; flex-direction: column; background: var(--color-bg); }
+      /* Every column is explicitly placed (not auto-flow) — with
+         #deploy-sidebar's own explicit column 1 in the mix, relying on
+         auto-placement for the rest let a display:none #deploy-sidebar
+         still claim column 1 in the placement algorithm, bumping #play-log
+         and #play-log-resizer one column to the right (caught visually:
+         the resizer rendered as a full-width block over column 1 instead of
+         a thin strip between columns 1 and 2). Explicit columns sidestep
+         that entirely. */
+      #play-log { grid-column: 1; grid-row: 1; min-width: 0; overflow: hidden; display: flex; flex-direction: column; background: var(--color-bg); }
       /* Same grid cell as #play-log (column 1, row 1) — the two are shown/
          hidden by main.ts depending on deployment vs. play phase, never
          both at once, so they can share the column-1 width the grid track
@@ -61,12 +69,22 @@
          rightmost text (e.g. a row's "Not yet placed" status) in the list
          below. Human-reported 2026-08-28. */
       #deploy-sidebar { grid-column: 1; grid-row: 1; min-width: 0; overflow-y: auto; scrollbar-gutter: stable; background: var(--color-bg); display: none; }
+      /* User-draggable divider between the combat log and the board column
+         (client-requested: the log column's width should be adjustable so a
+         full combat-log line can be made to fit on one line). Width itself
+         is set imperatively in main.ts (0 whenever the log column itself is
+         0 — deployment/collapsed), same pattern as the columns it sits
+         between. `background-clip` on a wider invisible hit box would be
+         nicer for touch, but a plain 6px track already gives a decent mouse
+         target and matches this app's existing "no touch support" scope. */
+      #play-log-resizer { grid-column: 2; grid-row: 1; cursor: col-resize; background: var(--color-divider); }
+      #play-log-resizer:hover, #play-log-resizer.is-resizing { background: var(--color-accent); }
       /* No padding directly on #play-inspector itself — box-sizing:border-box
          still can't shrink a padded box's rendered width below its padding,
          so a fixed-content grid item's track collapsing to 0 (were this
          column ever hidden) would otherwise leave a visible sliver.
          inspector.ts puts the padding on an inner wrapper instead. */
-      #play-inspector { min-width: 0; overflow-y: auto; border-left: 1px solid var(--color-divider); background: var(--color-bg); }
+      #play-inspector { grid-column: 4; grid-row: 1; min-width: 0; overflow-y: auto; border-left: 1px solid var(--color-divider); background: var(--color-bg); }
 
       /* -- The board column: unchanged dark canvas + the pre-overhaul
          overlay panels (#ui/#view-controls), now scoped to this column
@@ -78,7 +96,7 @@
          got their own popover instead, #redeploy-modal-overlay/
          #march-facing-modal-overlay below); #ui is unused during deployment
          now (Stage 3 moved that to #deploy-sidebar/#deploy-panel below). -- */
-      #board-col { position: relative; overflow: hidden; background: #1a1a1a; }
+      #board-col { grid-column: 3; grid-row: 1; position: relative; overflow: hidden; background: #1a1a1a; }
       #app { width: 100%; height: 100%; }
       /* Deployment's hex→formation→facing floating panel
          (src/ui/deployment.ts, renderDeploymentPanel) — same wrapper
@@ -177,6 +195,16 @@
       #kill-allocation-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
       #kill-allocation-modal-overlay:empty { display: none; }
       #kill-allocation-modal-overlay > * { pointer-events: auto; }
+
+      /* Fire Primary Target picker (src/ui/play/firePrimaryTargetModal.ts) —
+         shown when a Fire/garrison-Skirmish target hex holds more than one
+         enemy unit, so the attacker explicitly names one (or none) as the
+         Primary Target instead of a silent default. Same centered/dimmed
+         shell as #kill-allocation-modal-overlay above; own overlay for the
+         same null-clear-isolation reason. */
+      #fire-primary-target-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
+      #fire-primary-target-modal-overlay:empty { display: none; }
+      #fire-primary-target-modal-overlay > * { pointer-events: auto; }
 
       /* Sequential turn-phase walkthrough's own dialogs (src/ui/play/
          armyMoraleReportModal.ts, leaderPhaseModal.ts, phaseInstructionModal.ts,
@@ -349,7 +377,7 @@
          production bundle; main.ts only mounts it under import.meta.env.DEV. */
       #scenario-author-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
     </style>
-    <script type="module" crossorigin src="./assets/index-DnV4fgp1.js"></script>
+    <script type="module" crossorigin src="./assets/index-D07fC9Rz.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-BANFwY_9.css">
   </head>
   <body>
@@ -362,6 +390,7 @@
         <div id="play-grid">
           <div id="play-log"></div>
           <div id="deploy-sidebar"></div>
+          <div id="play-log-resizer"></div>
           <div id="board-col">
             <div id="app"></div>
             <div id="network-banner" class="top-banner" style="display:none;"></div>
@@ -396,6 +425,7 @@
       <div id="divide-command-modal-overlay"></div>
       <div id="skirmish-fire-modal-overlay"></div>
       <div id="kill-allocation-modal-overlay"></div>
+      <div id="fire-primary-target-modal-overlay"></div>
       <div id="army-morale-report-modal-overlay"></div>
       <div id="dice-roll-modal-overlay"></div>
       <div id="leader-phase-modal-overlay"></div>
