@@ -344,6 +344,16 @@
       #skirmisher-recall-modal-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
       #skirmisher-recall-modal-overlay:empty { display: none; }
 
+      /* Unit Consolidation overflow confirm popover (src/ui/play/
+         consolidationOverflowModal.ts, human-requested 2026-10-05) — same
+         shell/z-index as #skirmisher-recall-modal-overlay above; only ever
+         populated while `pending.kind === "confirmConsolidationOverflow"`,
+         which only arises during the Night Sequence's own "consolidate"
+         phase, so no stacking conflict with any of the normal-turn popovers
+         here. */
+      #consolidation-overflow-modal-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+      #consolidation-overflow-modal-overlay:empty { display: none; }
+
 
       /* Order of Battle screen (Stage 4, src/ui/orderOfBattle.ts) — a
          full-width screen shown instead of #play-topbar/#play-grid (toggled
@@ -377,7 +387,7 @@
          production bundle; main.ts only mounts it under import.meta.env.DEV. */
       #scenario-author-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
     </style>
-    <script type="module" crossorigin src="./assets/index-dKYnU5hv.js"></script>
+    <script type="module" crossorigin src="./assets/index-_Ll6aJG6.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-BANFwY_9.css">
   </head>
   <body>
@@ -409,6 +419,7 @@
             <div id="replace-leader-modal-overlay"></div>
             <div id="leader-accompany-modal-overlay"></div>
             <div id="skirmisher-recall-modal-overlay"></div>
+            <div id="consolidation-overflow-modal-overlay"></div>
           </div>
           <div id="play-inspector"></div>
         </div>
