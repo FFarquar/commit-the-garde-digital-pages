@@ -262,6 +262,15 @@
       #reserve-check-report-modal-overlay:empty { display: none; }
       #reserve-check-report-modal-overlay > * { pointer-events: auto; }
 
+      /* gameOverModal.ts — the fancy Victory/Defeat dialog shown once the
+         instant GameState.gameOver is set. Takes absolute priority over
+         every other modal above (the battle is over, nothing else can still
+         be pending), so it's last in DOM order here to paint on top of all
+         of them with no z-index juggling needed. */
+      #game-over-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
+      #game-over-modal-overlay:empty { display: none; }
+      #game-over-modal-overlay > * { pointer-events: auto; }
+
       /* Order popover (src/ui/play/orderModal.ts) — anchored to the
          selected unit's own on-screen position, so it lives inside
          #board-col (position:relative) rather than as a viewport-fixed
@@ -280,6 +289,14 @@
          in main.ts), so there's no stacking conflict between them. */
       #redeploy-modal-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
       #redeploy-modal-overlay:empty { display: none; }
+
+      /* Night Movement's order popup (src/ui/play/nightOrderModal.ts) — same
+         wrapper pattern/z-index as #redeploy-modal-overlay above; the two
+         are never populated at once (choosing "Redeploy"/"Move" there
+         clears selection or opens #redeploy-modal-overlay directly, see
+         main.ts's renderNightOrderModalPanel). */
+      #night-order-modal-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+      #night-order-modal-overlay:empty { display: none; }
 
       /* March's arrival-facing popover (src/ui/play/marchFacingModal.ts) —
          same wrapper pattern and z-index as #order-modal-overlay above;
@@ -387,7 +404,7 @@
          production bundle; main.ts only mounts it under import.meta.env.DEV. */
       #scenario-author-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
     </style>
-    <script type="module" crossorigin src="./assets/index-4jHledR-.js"></script>
+    <script type="module" crossorigin src="./assets/index-Bc_sbFGD.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-BANFwY_9.css">
   </head>
   <body>
@@ -411,6 +428,7 @@
             <button id="log-toggle"></button>
             <div id="order-modal-overlay"></div>
             <div id="redeploy-modal-overlay"></div>
+            <div id="night-order-modal-overlay"></div>
             <div id="march-facing-modal-overlay"></div>
             <div id="leader-order-modal-overlay"></div>
             <div id="army-hq-order-modal-overlay"></div>
@@ -447,6 +465,7 @@
       <div id="wfb-result-modal-overlay"></div>
       <div id="passage-of-time-report-modal-overlay"></div>
       <div id="reserve-check-report-modal-overlay"></div>
+      <div id="game-over-modal-overlay"></div>
     </div>
   </body>
 </html>
