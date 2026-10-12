@@ -115,13 +115,25 @@
       #ui .unit-list { display: flex; flex-direction: column; gap: 4px; margin: 6px 0; max-height: 55vh; overflow-y: auto; }
       #ui .unit-list button { width: 100%; text-align: left; }
       #ui .unit-list button.placed { border-color: #7fbf7f; }
-      #ui button, #view-controls button {
+      #ui button {
         background: #333; color: #e0d8c0; border: 1px solid #555; border-radius: 4px;
         padding: 5px 8px; font-size: 12px; cursor: pointer;
       }
-      #ui button:hover, #view-controls button:hover { background: #444; }
-      #ui button.active, #view-controls button.active { background: #6b5b1a; border-color: #ffdd55; }
+      #ui button:hover { background: #444; }
+      #ui button.active { background: #6b5b1a; border-color: #ffdd55; }
       #ui button:disabled { opacity: 0.4; cursor: default; }
+      /* Map controls (zoom/flip/reset/LOS/pin, #view-controls below) ride
+         the same token set as every .btn elsewhere (src/ui/theme.css) so
+         they follow the active UI style instead of staying a hardcoded
+         dark-only island. */
+      #view-controls button {
+        background: var(--color-surface); color: var(--color-text); border: 1px solid var(--color-divider);
+        border-radius: var(--radius-sm); padding: 5px 8px; font-size: 12px; cursor: pointer;
+        font-family: var(--font-heading); font-weight: var(--font-heading-weight);
+      }
+      #view-controls button:hover { background: color-mix(in srgb, var(--color-text) 7%, transparent); }
+      #view-controls button.active { background: var(--color-accent); color: var(--color-bg); border-color: var(--color-accent); }
+      #view-controls button:disabled { opacity: 0.4; cursor: default; }
       #ui .arrow { transform-origin: center; display: inline-block; }
       #ui .hint { color: #999; font-size: 11px; margin-top: 4px; }
       #ui .empty { color: #999; }
@@ -144,8 +156,8 @@
       #action-banner { pointer-events: auto; cursor: pointer; }
       #view-controls {
         position: absolute; bottom: 12px; right: 12px; display: flex; gap: 6px;
-        background: rgba(20, 20, 20, 0.88); border: 1px solid #4a4a4a; border-radius: 6px;
-        padding: 8px; pointer-events: auto;
+        background: var(--color-surface); border: 1px solid var(--color-divider); border-radius: var(--radius-md);
+        box-shadow: var(--shadow-md); padding: 8px; pointer-events: auto;
       }
       #log-toggle {
         position: absolute; left: 0; top: 50%; transform: translateY(-50%);
@@ -404,8 +416,8 @@
          production bundle; main.ts only mounts it under import.meta.env.DEV. */
       #scenario-author-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
     </style>
-    <script type="module" crossorigin src="./assets/index-C9d3iH8Z.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-oTwFqXuh.css">
+    <script type="module" crossorigin src="./assets/index-D3BgSUWe.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-DPZLcjGH.css">
   </head>
   <body>
     <div id="app-shell">
