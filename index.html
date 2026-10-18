@@ -256,6 +256,13 @@
       #exit-board-confirm-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
       #exit-board-confirm-modal-overlay:empty { display: none; }
       #exit-board-confirm-modal-overlay > * { pointer-events: auto; }
+      /* requestReserveModal.ts — "Random Reserve Selection" house rule's
+         type+Elite(+gun count) request dialog, opened from the Commit
+         Reserves sidebar. Same centered-dialog overlay pattern as the
+         confirm dialogs above. */
+      #request-reserve-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
+      #request-reserve-modal-overlay:empty { display: none; }
+      #request-reserve-modal-overlay > * { pointer-events: auto; }
       /* withdrawConfirmModal.ts / wfbResultModal.ts — TB-time handshake A6
          (Withdraw From Battle): the top-bar button's confirm, and the result
          dialog shown to both players. Same voluntary-dialog-on-top pattern. */
@@ -416,7 +423,7 @@
          production bundle; main.ts only mounts it under import.meta.env.DEV. */
       #scenario-author-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
     </style>
-    <script type="module" crossorigin src="./assets/index-Dc0zwc7I.js"></script>
+    <script type="module" crossorigin src="./assets/index-Bw_Cc0_E.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-DPZLcjGH.css">
   </head>
   <body>
@@ -473,6 +480,7 @@
       <div id="phase-instruction-modal-overlay"></div>
       <div id="end-activation-warning-modal-overlay"></div>
       <div id="exit-board-confirm-modal-overlay"></div>
+      <div id="request-reserve-modal-overlay"></div>
       <div id="withdraw-confirm-modal-overlay"></div>
       <div id="wfb-result-modal-overlay"></div>
       <div id="passage-of-time-report-modal-overlay"></div>
