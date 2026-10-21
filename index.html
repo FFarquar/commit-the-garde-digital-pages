@@ -154,6 +154,25 @@
       }
       #network-banner { pointer-events: none; }
       #action-banner { pointer-events: auto; cursor: pointer; }
+      /* Human-requested 2026-10-22: a freshly-shown top-banner (e.g. "Illegal
+         deployment hex.") was too easy to miss — this makes a NEW message
+         pop in at 2x size and flash a few times before settling back to the
+         normal 12px/steady-opacity look. Only applied on the rising edge (see
+         `flashTopBanner` in main.ts), not on every render while the message
+         is still showing, and `animationend` (not a timer) removes the class
+         so it never fights the normal fade-out above. */
+      .top-banner.flash-alert {
+        animation: top-banner-flash 2.4s ease-out;
+      }
+      @keyframes top-banner-flash {
+        0% { font-size: 24px; opacity: 1; }
+        15% { opacity: 0.2; }
+        30% { opacity: 1; }
+        45% { opacity: 0.2; }
+        60% { opacity: 1; }
+        75% { font-size: 24px; opacity: 1; }
+        100% { font-size: 12px; opacity: 1; }
+      }
       #view-controls {
         position: absolute; bottom: 12px; right: 12px; display: flex; gap: 6px;
         background: var(--color-surface); border: 1px solid var(--color-divider); border-radius: var(--radius-md);
@@ -423,7 +442,7 @@
          production bundle; main.ts only mounts it under import.meta.env.DEV. */
       #scenario-author-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
     </style>
-    <script type="module" crossorigin src="./assets/index-C_KmoX-q.js"></script>
+    <script type="module" crossorigin src="./assets/index-B9hEm2FS.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-DPZLcjGH.css">
   </head>
   <body>
