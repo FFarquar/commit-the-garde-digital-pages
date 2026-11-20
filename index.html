@@ -207,6 +207,17 @@
       #divide-command-modal-overlay:empty { display: none; }
       #divide-command-modal-overlay > * { pointer-events: auto; }
 
+      /* Generic "OK" info dialog (src/ui/play/infoModal.ts) — same
+         "opened voluntarily, not a game-state interrupt" reasoning as
+         #special-rules-modal-overlay above, own overlay for the same
+         reason. Placed after #divide-command-modal-overlay in the body
+         below so it paints on top of it (plain DOM-order stacking, no
+         explicit z-index) — it's meant to explain something that just
+         happened while that screen is still open. */
+      #info-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
+      #info-modal-overlay:empty { display: none; }
+      #info-modal-overlay > * { pointer-events: auto; }
+
       /* Skirmish Fire target-picker modal (src/ui/play/skirmishFireModal.ts,
          human-requested 2026-08-25 replacement for the old hover-anchored
          per-hex dialog, which was too easy to lose with a small mouse
@@ -442,7 +453,7 @@
          production bundle; main.ts only mounts it under import.meta.env.DEV. */
       #scenario-author-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
     </style>
-    <script type="module" crossorigin src="./assets/index-Dtr9p4KR.js"></script>
+    <script type="module" crossorigin src="./assets/index-GWPewoDf.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-CpfGpAxC.css">
   </head>
   <body>
@@ -490,6 +501,7 @@
       <div id="modal-overlay"></div>
       <div id="special-rules-modal-overlay"></div>
       <div id="divide-command-modal-overlay"></div>
+      <div id="info-modal-overlay"></div>
       <div id="skirmish-fire-modal-overlay"></div>
       <div id="kill-allocation-modal-overlay"></div>
       <div id="fire-primary-target-modal-overlay"></div>
