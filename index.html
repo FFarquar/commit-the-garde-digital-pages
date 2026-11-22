@@ -286,6 +286,13 @@
       #exit-board-confirm-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
       #exit-board-confirm-modal-overlay:empty { display: none; }
       #exit-board-confirm-modal-overlay > * { pointer-events: auto; }
+      /* destroyPontoonConfirmModal.ts — Friedland's "destroy this pontoon
+         bridge?" confirm raised by the order modal's "Destroy Pontoon
+         Bridge" action, same voluntary-confirm-on-top-of-a-phase pattern as
+         the two overlays above. */
+      #destroy-pontoon-confirm-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
+      #destroy-pontoon-confirm-modal-overlay:empty { display: none; }
+      #destroy-pontoon-confirm-modal-overlay > * { pointer-events: auto; }
       /* requestReserveModal.ts — "Random Reserve Selection" house rule's
          type+Elite(+gun count) request dialog, opened from the Commit
          Reserves sidebar. Same centered-dialog overlay pattern as the
@@ -354,6 +361,14 @@
          the same time, so no stacking conflict with either. */
       #march-facing-modal-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
       #march-facing-modal-overlay:empty { display: none; }
+
+      /* March's path-choice dialog (src/ui/play/marchPathChoiceModal.ts) —
+         human-reported bug fixed 2026-11-22. `.dialog-backdrop`-shaped (not
+         a popover like #march-facing-modal-overlay above), same dedicated-
+         overlay-div + pointer-events pattern as #divide-command-modal-overlay. */
+      #march-path-choice-modal-overlay { position: absolute; inset: 0; pointer-events: none; z-index: 3; }
+      #march-path-choice-modal-overlay:empty { display: none; }
+      #march-path-choice-modal-overlay > * { pointer-events: auto; }
 
       /* Leader-order popover (src/ui/play/leaderOrderModal.ts, Phase 5
          Stage 7 increment 2) — same wrapper pattern and z-index as
@@ -453,7 +468,7 @@
          production bundle; main.ts only mounts it under import.meta.env.DEV. */
       #scenario-author-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
     </style>
-    <script type="module" crossorigin src="./assets/index-CWY0NuRi.js"></script>
+    <script type="module" crossorigin src="./assets/index-BjAxHC9y.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-CpfGpAxC.css">
   </head>
   <body>
@@ -479,6 +494,7 @@
             <div id="redeploy-modal-overlay"></div>
             <div id="night-order-modal-overlay"></div>
             <div id="march-facing-modal-overlay"></div>
+            <div id="march-path-choice-modal-overlay"></div>
             <div id="leader-order-modal-overlay"></div>
             <div id="army-hq-order-modal-overlay"></div>
             <div id="exchange-leader-modal-overlay"></div>
@@ -511,6 +527,7 @@
       <div id="phase-instruction-modal-overlay"></div>
       <div id="end-activation-warning-modal-overlay"></div>
       <div id="exit-board-confirm-modal-overlay"></div>
+      <div id="destroy-pontoon-confirm-modal-overlay"></div>
       <div id="request-reserve-modal-overlay"></div>
       <div id="withdraw-confirm-modal-overlay"></div>
       <div id="wfb-result-modal-overlay"></div>
