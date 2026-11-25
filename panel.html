@@ -1,0 +1,16 @@
+<!doctype html>
+<!-- Empty shell for floatingPanel.ts's pop-out windows (src/ui/play/floatingPanel.ts's
+     `openPopout`). Served as a static file so the popup navigates to a real,
+     same-origin URL instead of "about:blank" — Chrome always shows SOME
+     address bar on a script-opened window (a deliberate anti-phishing
+     measure, not something a page can suppress), so the best available fix
+     is making it show a real page instead of a blank one. Everything in
+     this page's actual content (title, styles, the floating panel's body)
+     is injected by the opener window via direct same-origin DOM access
+     after this loads — there is no script of its own here. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+  </head>
+  <body></body>
+</html>

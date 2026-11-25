@@ -97,6 +97,26 @@
          #march-facing-modal-overlay below); #ui is unused during deployment
          now (Stage 3 moved that to #deploy-sidebar/#deploy-panel below). -- */
       #board-col { grid-column: 3; grid-row: 1; position: relative; overflow: hidden; background: #1a1a1a; }
+
+      /* "Main control review" Phase 1: shown over the board in place of the
+         Pixi canvas whenever no game has been entered yet this session
+         (main.ts's `boardEntered` flag) — a placeholder until real art
+         replaces it. Sits above #app (the canvas) via z-index; display is
+         toggled from "none" by main.ts, never by CSS alone. */
+      #board-placeholder {
+        display: none;
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background: #2b3a4a;
+        color: #e8edf2;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-heading, sans-serif);
+        font-weight: 600;
+        font-size: 64px;
+        letter-spacing: 4px;
+      }
       #app { width: 100%; height: 100%; }
       /* Deployment's hex→formation→facing floating panel
          (src/ui/deployment.ts, renderDeploymentPanel) — same wrapper
@@ -181,7 +201,16 @@
       #log-toggle {
         position: absolute; left: 0; top: 50%; transform: translateY(-50%);
         background: rgba(20, 20, 20, 0.88); color: #e0d8c0; border: 1px solid #4a4a4a; border-left: none;
-        padding: 10px 4px; cursor: pointer; font-size: 12px; z-index: 2;
+        padding: 10px 4px; cursor: pointer; font-size: 12px;
+        /* No explicit z-index (human-reported "main control review" bug: this
+           used to bleed through an open floating panel — Order of Battle/
+           Victory/Briefing, src/ui/play/floatingPanel.ts — because ANY
+           explicit z-index outranks an unpositioned/z-index:auto element
+           regardless of its value, and those panels deliberately have none
+           (see floatingPanel.ts's own doc comment on why: so they stay
+           BELOW #modal-overlay's interrupt dialogs, which are also
+           z-index:auto). This button's document position already puts it
+           above its real board-chrome neighbors without needing one. */
       }
       #log-toggle:empty { display: none; }
 
@@ -192,13 +221,11 @@
       #modal-overlay > * { pointer-events: auto; }
 
       /* Scenario Briefing / Special Rules viewer (Phase 5.5 Stage 7,
-         src/ui/play/specialRulesModal.ts) — a separate overlay from
-         #modal-overlay above because it's opened voluntarily by the player
-         at any time (topbar button), not a game-state interrupt, so it
-         doesn't participate in that overlay's mutual-exclusivity logic. */
-      #special-rules-modal-overlay { position: absolute; inset: 0; pointer-events: none; }
-      #special-rules-modal-overlay:empty { display: none; }
-      #special-rules-modal-overlay > * { pointer-events: auto; }
+         src/ui/play/specialRulesModal.ts) — "main control review" Phase 2:
+         no longer its own backdrop/dialog overlay. It's now plain content,
+         floated over the board by #briefing-panel-host (floatingPanel.ts)
+         below, same as #oob-screen/#victory-screen. */
+      #special-rules-modal-overlay { height: 100%; }
 
       /* Divide Command screen (src/ui/play/divideCommandModal.ts) — same
          "opened voluntarily, not a game-state interrupt" reasoning as
@@ -436,15 +463,27 @@
       #consolidation-overflow-modal-overlay:empty { display: none; }
 
 
-      /* Order of Battle screen (Stage 4, src/ui/orderOfBattle.ts) — a
-         full-width screen shown instead of #play-topbar/#play-grid (toggled
-         by main.ts off the Router's current screen), not a modal. */
-      #oob-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
+      /* Order of Battle screen (Stage 4, src/ui/orderOfBattle.ts) —
+         "main control review" Phase 2: content only. #oob-panel-host below
+         (floatingPanel.ts) supplies the draggable/resizable/closable chrome
+         this used to provide itself as a full-width screen. */
+      #oob-screen { height: 100%; }
 
-      /* Victory screen (src/ui/victoryScreen.ts) — same full-width-instead-
-         of-#play-topbar/#play-grid pattern as #oob-screen above; shows p.4's
-         three game-end conditions and live progress toward each. */
-      #victory-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
+      /* Victory screen (src/ui/victoryScreen.ts) — same "content only, the
+         panel host supplies the chrome" pattern as #oob-screen above; shows
+         p.4's three game-end conditions and live progress toward each. */
+      #victory-screen { height: 100%; }
+
+      /* Floating panel hosts (src/ui/play/floatingPanel.ts) — Order of
+         Battle, Victory, and Briefing can each be open, closed, dragged,
+         resized, and brought to front independently, floating over the
+         board (which main.ts keeps mounted and rendering underneath, unlike
+         the full-width screens — Menu/Join/Admin/Scenario Author — these
+         replaced). Position/size are set entirely by floatingPanel.ts at
+         runtime (remembered per-id across opens within the session); the
+         only thing owned here is the starting `display: none` before the
+         first render call ever shows one. */
+      #oob-panel-host, #victory-panel-host, #briefing-panel-host { display: none; }
 
       /* Menu screen (Track B stage B-2, src/ui/menu.ts) — same
          full-width-instead-of-#play-topbar/#play-grid pattern as #oob-screen
@@ -468,7 +507,7 @@
          production bundle; main.ts only mounts it under import.meta.env.DEV. */
       #scenario-author-screen { display: none; overflow-y: auto; height: 100%; background: var(--color-bg); }
     </style>
-    <script type="module" crossorigin src="./assets/index-DBGyT9PW.js"></script>
+    <script type="module" crossorigin src="./assets/index-Db83uwUh.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-CpfGpAxC.css">
   </head>
   <body>
@@ -484,6 +523,7 @@
           <div id="play-log-resizer"></div>
           <div id="board-col">
             <div id="app"></div>
+            <div id="board-placeholder"></div>
             <div id="network-banner" class="top-banner" style="display:none;"></div>
             <div id="action-banner" class="top-banner" style="display:none;"></div>
             <div id="ui"></div>
@@ -506,16 +546,34 @@
           </div>
           <div id="play-inspector"></div>
         </div>
-        <div id="oob-screen"></div>
-        <div id="victory-screen"></div>
         <div id="menu-screen"></div>
         <div id="scenario-picker-screen"></div>
         <div id="join-screen"></div>
         <div id="admin-screen"></div>
         <div id="scenario-author-screen"></div>
       </div>
+      <!-- "Main control review" Phase 2 — Order of Battle/Victory/Briefing's
+           own content divs, floated over the board by floatingPanel.ts
+           instead of replacing it. Plain, unstyled, top-level here: each is
+           reparented into its matching #*-panel-host below on first render
+           (host.appendChild moves the node, it doesn't clone it), so their
+           position in this markup only matters before that first render. -->
+      <div id="oob-screen" style="display:none;"></div>
+      <div id="victory-screen" style="display:none;"></div>
+      <div id="special-rules-modal-overlay" style="display:none;"></div>
+      <!-- Dedicated wrapper so floatingPanel.ts's click-to-front (reordering
+           a host to be the last child of its own parent) only ever reorders
+           these three relative to EACH OTHER, never relative to
+           #modal-overlay and the other interrupt-style overlays below —
+           those must always paint on top of a floating panel regardless of
+           which panel was most recently focused (see floatingPanel.ts's own
+           doc comment on why it never sets an explicit z-index). -->
+      <div id="floating-panels">
+        <div id="oob-panel-host"></div>
+        <div id="victory-panel-host"></div>
+        <div id="briefing-panel-host"></div>
+      </div>
       <div id="modal-overlay"></div>
-      <div id="special-rules-modal-overlay"></div>
       <div id="divide-command-modal-overlay"></div>
       <div id="info-modal-overlay"></div>
       <div id="skirmish-fire-modal-overlay"></div>
